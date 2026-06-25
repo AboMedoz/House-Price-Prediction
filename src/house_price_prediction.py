@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 # https://www.zillow.com/research/data/
-df = pd.read_csv('Metro_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv')
+df = pd.read_csv('data.csv')
 
 print(df.isna().sum().sum())
 print(df.duplicated().sum().sum())
@@ -46,3 +46,10 @@ plt.xlabel('Actual Prices')
 plt.ylabel('Predicted Prices')
 plt.scatter(y_test, y_pred, alpha=0.5)
 plt.show()
+
+dummy = pd.get_dummies(df.iloc[[0], :5])
+case = pd.concat([dummy, df.iloc[[0], 5:-1]], axis=1)
+case = case.reindex(columns=x.columns, fill_value=0)
+case_transformed = scaler.transform(case)
+prediction = model.predict(case_transformed)
+print(prediction[0])
